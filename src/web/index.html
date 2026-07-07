@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>スマート冷蔵庫管理(デモ版)</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <i class="fa-solid fa-snowflake" aria-hidden="true"></i>
+        <div>
+          <h1 data-i18n="app.title">スマート冷蔵庫管理</h1>
+          <p class="subtitle" data-i18n="app.subtitle"></p>
+        </div>
+      </div>
+      <label class="lang-select">
+        <i class="fa-solid fa-language" aria-hidden="true"></i>
+        <span class="sr-only" data-i18n="lang.label">言語</span>
+        <select id="langSelect" aria-label="language"></select>
+      </label>
+    </header>
+
+    <main class="layout">
+      <section class="panel status-panel">
+        <div class="alert-card" id="alertCard">
+          <div class="led" id="ledIndicator" aria-hidden="true"></div>
+          <div class="alert-text">
+            <h2 data-i18n="alert.heading">アラート状態</h2>
+            <p class="alert-level" id="alertLevel">-</p>
+            <p class="alert-meta" id="alertMeta"></p>
+          </div>
+        </div>
+        <div class="device-card">
+          <h3 data-i18n="device.heading">ESP32 デバイス</h3>
+          <p>
+            <i class="fa-solid fa-fan" id="fanIcon" aria-hidden="true"></i>
+            <span id="fanState"></span>
+          </p>
+          <p>
+            <i class="fa-solid fa-plug" aria-hidden="true"></i>
+            <span id="deviceState"></span>
+          </p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2><i class="fa-solid fa-camera" aria-hidden="true"></i> <span data-i18n="register.heading"></span></h2>
+        <form id="registerForm" autocomplete="off">
+          <label class="field">
+            <span data-i18n="register.ocrLabel"></span>
+            <textarea id="ocrText" rows="2" required></textarea>
+          </label>
+          <p class="hint" data-i18n="register.ocrHint"></p>
+          <label class="field">
+            <span data-i18n="register.nameLabel"></span>
+            <input type="text" id="itemName" />
+          </label>
+          <!-- ハニーポット: 人間には不可視。入力があれば破棄される。 -->
+          <div class="hp" aria-hidden="true">
+            <label>Website<input type="text" id="hpWebsite" name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <button type="submit" class="btn primary">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> <span data-i18n="register.submit"></span>
+          </button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2><i class="fa-solid fa-keyboard" aria-hidden="true"></i> <span data-i18n="manual.heading"></span></h2>
+        <p class="hint" data-i18n="manual.hint"></p>
+        <form id="manualForm" autocomplete="off">
+          <label class="field">
+            <span data-i18n="manual.categoryLabel"></span>
+            <select id="manualCategory"></select>
+          </label>
+          <label class="field">
+            <span data-i18n="manual.expiryLabel"></span>
+            <input type="date" id="manualExpiry" required />
+          </label>
+          <div class="hp" aria-hidden="true">
+            <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <button type="submit" class="btn">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> <span data-i18n="manual.submit"></span>
+          </button>
+        </form>
+      </section>
+
+      <section class="panel list-panel">
+        <div class="list-head">
+          <h2><i class="fa-solid fa-box-open" aria-hidden="true"></i> <span data-i18n="list.heading"></span></h2>
+          <button type="button" class="btn danger-outline" id="resetBtn">
+            <i class="fa-solid fa-rotate" aria-hidden="true"></i> <span data-i18n="action.reset"></span>
+          </button>
+        </div>
+        <ul id="itemList" class="item-list"></ul>
+        <p id="emptyMsg" class="empty" data-i18n="list.empty"></p>
+      </section>
+    </main>
+
+    <!-- 独自モーダル(ネイティブ confirm の代替) -->
+    <div class="modal-backdrop" id="modalBackdrop" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <h3 id="modalTitle"></h3>
+        <p id="modalBody"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn" id="modalCancel"></button>
+          <button type="button" class="btn danger" id="modalConfirm"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 独自トースト(ネイティブ alert の代替) -->
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
