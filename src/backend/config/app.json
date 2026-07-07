@@ -1,0 +1,38 @@
+{
+  "session": {
+    "cookieName": "fw_session",
+    "idBytes": 16
+  },
+  "upload": {
+    "maxBytes": 5242880
+  },
+  "expiry": {
+    "rejectOverDays": 730
+  },
+  "remain": {
+    "min": 0,
+    "max": 100,
+    "initialPercent": 100,
+    "restockThreshold": 20
+  },
+  "alert": {
+    "safeMinDays": 4,
+    "warningMinDays": 1
+  },
+  "esp32": {
+    "baseUrl": "http://192.168.4.1",
+    "maxRetries": 3,
+    "cooldownMinutes": 10,
+    "fanSeconds": 30,
+    "timeoutMs": 2000
+  },
+  "reset": {
+    "hourJst": 3,
+    "minuteJst": 0
+  },
+  "i18n": {
+    "defaultLocale": "ja",
+    "locales": ["ja", "en", "fr", "zh", "ru", "es", "ar"],
+    "rtlLocales": ["ar"]
+  }
+}
