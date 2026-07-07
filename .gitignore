@@ -9,6 +9,7 @@ config/credentials/*.key
 
 # --- Node / Next.js ---
 node_modules/
+/node_modules
 .next/
 out/
 npm-debug.log*
