@@ -38,7 +38,6 @@ Thumbs.db
 
 # --- 追跡は README.md / CLAUDE.md / SPEC/ のみ ---
 .claude/
-.devcontainer/
 .devcontainers/
 app-ui/
 CLIENT/
