@@ -31,6 +31,14 @@ venv/
 *.sqlite3
 *.sqlite3-journal
 db/*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+src/data/
+
+# --- TypeScript build 生成物 ---
+src/dist/
+dist/
 
 # --- OS / editor ---
 .DS_Store
@@ -48,4 +56,3 @@ TASKS/
 WORK/
 test/
 .env.example
-fridge-watch-demo_design_documents.md

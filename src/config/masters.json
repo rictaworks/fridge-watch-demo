@@ -1,0 +1,77 @@
+{
+  "categories": [
+    { "id": 1, "key": "dairy", "name": "乳製品" },
+    { "id": 2, "key": "meat", "name": "肉" },
+    { "id": 3, "key": "seafood", "name": "魚介" },
+    { "id": 4, "key": "vegetable", "name": "野菜" },
+    { "id": 5, "key": "fruit", "name": "果物" },
+    { "id": 6, "key": "egg", "name": "卵" },
+    { "id": 7, "key": "seasoning", "name": "調味料" },
+    { "id": 8, "key": "other", "name": "その他" }
+  ],
+  "default_expiry": [
+    { "category_id": 1, "default_days": 5 },
+    { "category_id": 2, "default_days": 3 },
+    { "category_id": 3, "default_days": 2 },
+    { "category_id": 4, "default_days": 7 },
+    { "category_id": 5, "default_days": 7 },
+    { "category_id": 6, "default_days": 14 },
+    { "category_id": 7, "default_days": 180 },
+    { "category_id": 8, "default_days": 5 }
+  ],
+  "consumption_rate": [
+    { "category_id": 1, "percent_per_day": 20 },
+    { "category_id": 2, "percent_per_day": 25 },
+    { "category_id": 3, "percent_per_day": 30 },
+    { "category_id": 4, "percent_per_day": 15 },
+    { "category_id": 5, "percent_per_day": 12 },
+    { "category_id": 6, "percent_per_day": 8 },
+    { "category_id": 7, "percent_per_day": 1 },
+    { "category_id": 8, "percent_per_day": 10 }
+  ],
+  "date_patterns": [
+    { "id": 1, "label": "消費期限接頭", "regex": "消費期限[:\\s]*((?:19|20)\\d{2})[.\\-/年](\\d{1,2})[.\\-/月](\\d{1,2})", "priority": 100, "kind": "prefer_ymd" },
+    { "id": 2, "label": "YYYY年MM月DD日", "regex": "((?:19|20)\\d{2})年(\\d{1,2})月(\\d{1,2})日", "priority": 80, "kind": "ymd" },
+    { "id": 3, "label": "YYYY.MM.DD", "regex": "((?:19|20)\\d{2})[.\\-/](\\d{1,2})[.\\-/](\\d{1,2})", "priority": 70, "kind": "ymd" },
+    { "id": 4, "label": "YYYY-MM-DD", "regex": "((?:19|20)\\d{2})-(\\d{1,2})-(\\d{1,2})", "priority": 70, "kind": "ymd" },
+    { "id": 5, "label": "YY.MM.DD", "regex": "(?<![0-9])(\\d{2})[.\\-/](\\d{1,2})[.\\-/](\\d{1,2})(?![0-9])", "priority": 40, "kind": "yymd" },
+    { "id": 6, "label": "MM.DD(年省略)", "regex": "(?<![0-9./\\-])(\\d{1,2})[.\\-/](\\d{1,2})(?![0-9./\\-])", "priority": 20, "kind": "md" }
+  ],
+  "category_keywords": [
+    { "id": 1, "category_id": 1, "keyword": "牛乳" },
+    { "id": 2, "category_id": 1, "keyword": "ミルク" },
+    { "id": 3, "category_id": 1, "keyword": "ヨーグルト" },
+    { "id": 4, "category_id": 2, "keyword": "牛肉" },
+    { "id": 5, "category_id": 2, "keyword": "豚肉" },
+    { "id": 6, "category_id": 2, "keyword": "鶏肉" },
+    { "id": 7, "category_id": 3, "keyword": "鮭" },
+    { "id": 8, "category_id": 3, "keyword": "まぐろ" },
+    { "id": 9, "category_id": 3, "keyword": "えび" },
+    { "id": 10, "category_id": 4, "keyword": "キャベツ" },
+    { "id": 11, "category_id": 4, "keyword": "にんじん" },
+    { "id": 12, "category_id": 4, "keyword": "トマト" },
+    { "id": 13, "category_id": 5, "keyword": "りんご" },
+    { "id": 14, "category_id": 5, "keyword": "バナナ" },
+    { "id": 15, "category_id": 5, "keyword": "みかん" },
+    { "id": 16, "category_id": 6, "keyword": "卵" },
+    { "id": 17, "category_id": 6, "keyword": "たまご" },
+    { "id": 18, "category_id": 6, "keyword": "エッグ" },
+    { "id": 19, "category_id": 7, "keyword": "醤油" },
+    { "id": 20, "category_id": 7, "keyword": "味噌" },
+    { "id": 21, "category_id": 7, "keyword": "ソース" },
+    { "id": 22, "category_id": 8, "keyword": "惣菜" },
+    { "id": 23, "category_id": 8, "keyword": "デザート" },
+    { "id": 24, "category_id": 8, "keyword": "その他" }
+  ],
+  "alert_levels": [
+    { "id": 1, "key": "safe", "name": "安全", "min_days": 4, "led_color": "green" },
+    { "id": 2, "key": "warning", "name": "注意", "min_days": 1, "led_color": "yellow" },
+    { "id": 3, "key": "danger", "name": "危険", "min_days": -99999, "led_color": "red" }
+  ],
+  "esp32_commands": [
+    { "id": 1, "level_key": "safe", "command": "LED_GREEN", "fan_seconds": 0 },
+    { "id": 2, "level_key": "warning", "command": "LED_YELLOW", "fan_seconds": 0 },
+    { "id": 3, "level_key": "danger", "command": "LED_RED_FAN", "fan_seconds": 30 },
+    { "id": 4, "level_key": "off", "command": "LED_OFF", "fan_seconds": 0 }
+  ]
+}
