@@ -1,0 +1,52 @@
+# --- Secrets / env ---
+.env
+.env.*
+!.env.example
+CLAUDE.local.md
+config/master.key
+config/credentials/*.key
+*.pem
+
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+npm-debug.log*
+yarn-error.log*
+
+# --- Ruby / Rails ---
+/log/*
+/tmp/*
+/storage/*
+.bundle/
+vendor/bundle
+
+# --- Python / FastAPI ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# --- SQLite (demo DB) ---
+*.sqlite3
+*.sqlite3-journal
+db/*.sqlite3
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+
+# --- 追跡は README.md / CLAUDE.md / SPEC/ のみ ---
+.claude/
+.devcontainer/
+.devcontainers/
+app-ui/
+CLIENT/
+DEBUG/
+DELETE/
+ENV/
+TASKS/
+WORK/
+test/
+.env.example
+fridge-watch-demo_design_documents.md
