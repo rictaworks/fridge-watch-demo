@@ -68,6 +68,10 @@ RUN groupadd --system --gid 1000 rails && \
 COPY --chown=rails:rails --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --chown=rails:rails --from=build /rails /rails
 
+# COPY からの実行ビット継承がビルド環境によって失われるケース(EACCES: exec permission denied)への
+# 保険として、起動に必要なスクリプトへ明示的に実行権限を付与する。
+RUN chmod +x /rails/bin/*
+
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
