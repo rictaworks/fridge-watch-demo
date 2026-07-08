@@ -21,14 +21,14 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  # config.assume_ssl = true
+  # Railway など SSL 終端リバースプロキシ配下で動作する前提。
+  config.assume_ssl = true
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  # 全アクセスを SSL 化し、HSTS と secure cookie を有効化する。
+  config.force_ssl = true
 
-  # Skip http-to-https redirect for the default health check endpoint.
-  # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+  # 死活監視 /up は http→https リダイレクト対象から除外する。
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # Log to STDOUT with the current request id as a default log tag.
   config.log_tags = [ :request_id ]
@@ -76,12 +76,13 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # DNS リバインディング保護 / Host ヘッダ攻撃対策。
+  # Railway の既定ドメイン(*.railway.app / *.up.railway.app)を許可し、
+  # 公開ドメインや独自ドメインは環境変数で追加する。
+  config.hosts = [ /.*\.railway\.app/ ]
+  config.hosts << ENV["RAILWAY_PUBLIC_DOMAIN"] if ENV["RAILWAY_PUBLIC_DOMAIN"].present?
+  config.hosts << ENV["APP_HOST"] if ENV["APP_HOST"].present?
+
+  # 死活監視 /up は DNS リバインディング保護の対象から除外する。
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end

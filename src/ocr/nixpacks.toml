@@ -1,0 +1,11 @@
+# Railway(Nixpacks)ビルド設定 — FastAPI OCR サービス
+# tesseract 本体と日本語データ、OpenCV(headless)の実行時依存を導入する。
+[phases.setup]
+aptPkgs = ["tesseract-ocr", "tesseract-ocr-jpn", "libglib2.0-0"]
+
+[phases.install]
+cmds = ["pip install --no-cache-dir -r requirements.txt"]
+
+# 本番は Railway が注入する $PORT で待受する(config.py の OCR_PORT 既定 8001 はローカル用)。
+[start]
+cmd = "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
