@@ -1,0 +1,8 @@
+# Railway の `railway up` は git blob ではなくワーキングツリーのファイルを
+# そのままアップロードしてDockerイメージをビルドする。このリポジトリは
+# Windows端末で `core.autocrlf=true` のため、シェバンスクリプト
+# (#!/usr/bin/env ruby 等)がワーキングツリー上でCRLF化され、
+# ビルド後のコンテナで `ruby\r: No such file or directory` のように
+# シェバン解釈が壊れる不具合が発生した(2026-07-08)。
+# 該当スクリプトは常にLF改行を強制する。
+src/backend/bin/* text eol=lf
