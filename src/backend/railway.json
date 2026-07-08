@@ -1,0 +1,14 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "startCommand": "bash -c \"chown -R rails:rails /rails/storage && gosu rails ./bin/rails db:prepare && exec gosu rails ./bin/thrust ./bin/rails server\"",
+    "healthcheckPath": "/up",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  }
+}

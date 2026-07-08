@@ -1,5 +1,15 @@
 #!/bin/bash -e
 
+# Railway など一部の実行環境は永続ボリュームを root 所有でマウントするため、
+# root で起動した場合のみ storage の所有権を rails に合わせ、gosu で rails ユーザーへ
+# 降格して自身を再実行する。これによりアプリ本体は非 root で動作しつつ、
+# 永続ボリューム上の SQLite を読み書きできる。
+if [ "$(id -u)" = "0" ]; then
+  mkdir -p /rails/storage
+  chown -R rails:rails /rails/storage
+  exec gosu rails "$0" "$@"
+fi
+
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   ./bin/rails db:prepare

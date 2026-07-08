@@ -15,8 +15,9 @@ FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 WORKDIR /rails
 
 # Install base packages
+# gosu: 起動時のみ root で永続ボリュームの所有権を合わせ、その後アプリを非 root(rails)で実行するために使う。
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 gosu && \
     ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
@@ -57,10 +58,11 @@ RUN bundle exec bootsnap precompile -j 1 app/ lib/
 # Final stage for app image
 FROM base
 
-# Run and own only the runtime files as a non-root user for security
+# Create the non-root runtime user. コンテナは root で起動し、entrypoint/startCommand が
+# 永続ボリュームの所有権を合わせた直後に gosu で rails(uid 1000)へ降格する。
+# (Railway など root 所有でマウントされる volume に非 root が書けない問題への対応)
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
-USER 1000:1000
 
 # Copy built artifacts: gems, application
 COPY --chown=rails:rails --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"

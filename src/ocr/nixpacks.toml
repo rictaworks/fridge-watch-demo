@@ -1,0 +1,9 @@
+# Railway(Nixpacks)ビルド設定 — FastAPI OCR サービス
+# tesseract 本体と日本語データ、OpenCV(headless)の実行時依存を追加する。
+#
+# Python 本体 / pip / venv の導入と、requirements.txt の依存インストールは
+# Nixpacks の Python プロバイダに委ねる(phases.install を上書きすると
+# venv の pip が PATH から外れ「pip: command not found」で失敗するため上書きしない)。
+# 起動コマンドは railway.json の deploy.startCommand(uvicorn, $PORT)が担う。
+[phases.setup]
+aptPkgs = ["tesseract-ocr", "tesseract-ocr-jpn", "libglib2.0-0"]
