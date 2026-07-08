@@ -63,7 +63,7 @@ RSpec.configure do |config|
   # ファイル配置から spec タイプを推論(spec/requests -> :request 等)。
   config.infer_spec_type_from_file_location!
 
-  # マスタ 61件をテスト DB に投入する(トランザクション外なので全 example で共有される)。
+  # マスタ 64件をテスト DB に投入する(トランザクション外なので全 example で共有される)。
   config.before(:suite) do
     load Rails.root.join("db", "seeds.rb")
   end

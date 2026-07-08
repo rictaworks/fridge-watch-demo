@@ -8,8 +8,8 @@ RSpec.describe ExpiryResolver do
   # 2026-07-07 12:00 JST(= 2026-07-07 03:00 UTC)。
   let(:now) { Time.utc(2026, 7, 7, 3, 0, 0) }
 
-  def resolve(text, default_days: 5)
-    described_class.resolve(text, patterns: patterns, default_days: default_days, now: now)
+  def resolve(text)
+    described_class.resolve(text, patterns: patterns, now: now)
   end
 
   it "「消費期限」接頭を最優先し、より未来の日付より優先する" do
@@ -33,22 +33,37 @@ RSpec.describe ExpiryResolver do
     expect(resolve("28.03.15").expiry_date).to eq("2028-03-15")
   end
 
-  it "今日から2年超先の日付は誤読として棄却し、デフォルト補完(推定)する" do
-    result = resolve("2099.01.01", default_days: 5)
-    expect(result.is_estimated).to be(true)
-    expect(result.source).to eq("default")
-    expect(result.expiry_date).to eq("2026-07-12") # today + 5
+  it "今日から2年超先の日付は誤読として棄却しnilを返す" do
+    expect(resolve("2099.01.01")).to be_nil
   end
 
-  it "採用可能な日付が無ければカテゴリ別デフォルト期限で補完する" do
-    result = resolve("なにも日付が無いテキスト", default_days: 3)
-    expect(result.is_estimated).to be(true)
-    expect(result.expiry_date).to eq("2026-07-10") # today + 3
+  it "採用可能な日付が一つも無ければnilを返す(手動入力に誘導させる)" do
+    expect(resolve("なにも日付が無いテキスト")).to be_nil
   end
 
   it "過去日でも採用する(即時アラート対象)" do
     result = resolve("2026.07.01")
     expect(result.expiry_date).to eq("2026-07-01")
     expect(result.is_estimated).to be(false)
+  end
+
+  it "YYYY.MM(日省略)は当該月の末日に補完し推定扱いとする" do
+    result = resolve("2028.04")
+    expect(result.expiry_date).to eq("2028-04-30")
+    expect(result.is_estimated).to be(true)
+    expect(result.source).to eq("ocr_month")
+  end
+
+  it "YYYY年MM月(日省略)も当該月の末日に補完する" do
+    result = resolve("2028年4月")
+    expect(result.expiry_date).to eq("2028-04-30")
+    expect(result.is_estimated).to be(true)
+  end
+
+  it "「消費期限」接頭の日省略表記は、より未来のフル日付より優先する" do
+    result = resolve("消費期限2028年4月 賞味期限2029.12.31")
+    expect(result.expiry_date).to eq("2028-04-30")
+    expect(result.is_estimated).to be(true)
+    expect(result.source).to eq("ocr_month")
   end
 end

@@ -29,6 +29,12 @@ RSpec.describe FridgeService do
       expect(result).to eq({ needManual: true })
       expect(FoodItem.where(session_id: sid_a).count).to eq(0)
     end
+
+    it "OCR テキストはあるが日付が抽出できない場合は needManual を返し登録しない(デフォルト補完しない)" do
+      result = service.register_from_ocr(sid_a, name: "総菜の素", ocr_text: "なにも日付が無いテキスト", now: now)
+      expect(result).to eq({ needManual: true })
+      expect(FoodItem.where(session_id: sid_a).count).to eq(0)
+    end
   end
 
   describe "F2 残量補正と所有分離" do
