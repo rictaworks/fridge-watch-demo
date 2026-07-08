@@ -5,7 +5,7 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "env HTTP_PORT=$PORT ./bin/thrust ./bin/rails server",
+    "startCommand": "bash -c \"chown -R rails:rails /rails/storage && gosu rails ./bin/rails db:prepare && exec gosu rails ./bin/thrust ./bin/rails server\"",
     "healthcheckPath": "/up",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
