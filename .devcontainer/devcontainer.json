@@ -10,11 +10,9 @@
   // Node 22 ベース（npm 版 Claude Code と各 CLI が要求する版に対応）
   "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
 
-  // 追加機能：GitHub CLI（gh）/ sshd（gh codespace ssh 用）/ Ruby（RSpec 実行用）を同梱
+  // 追加機能：GitHub CLI（gh）を同梱
   "features": {
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/sshd:1": {},
-    "ghcr.io/devcontainers/features/ruby:1": { "version": "3.3" }
+    "ghcr.io/devcontainers/features/github-cli:1": {}
   },
 
   // ------------------------------------------------------------
