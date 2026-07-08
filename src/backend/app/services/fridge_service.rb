@@ -11,18 +11,16 @@ class FridgeService
     @repo = repo
   end
 
-  # F1: OCR テキストから登録。ocr_text が空(完全失敗)なら need_manual を返し登録しない。
+  # F1: OCR テキストから登録。ocr_text が空(完全失敗)、または日付が一つも抽出できない場合は
+  # needManual を返し登録しない(カテゴリ別デフォルトへのフォールバックは行わない)。
   def register_from_ocr(session_id, name:, ocr_text:, now:)
     text = ocr_text.to_s.strip
     return { needManual: true } if text.empty?
 
     category_id = CategoryClassifier.classify(text, @masters.category_keywords, @masters.other_category_id)
-    expiry = ExpiryResolver.resolve(
-      text,
-      patterns: @masters.date_patterns,
-      default_days: @masters.default_days_for(category_id),
-      now: now,
-    )
+    expiry = ExpiryResolver.resolve(text, patterns: @masters.date_patterns, now: now)
+    return { needManual: true } if expiry.nil?
+
     @repo.insert_item(
       session_id: session_id,
       category_id: category_id,

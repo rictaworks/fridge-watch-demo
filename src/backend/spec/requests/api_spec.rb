@@ -39,6 +39,11 @@ RSpec.describe "API", type: :request do
       expect(response.parsed_body).to eq({ "needManual" => true })
     end
 
+    it "OCR テキストに日付が無い場合も needManual を返す(デフォルト補完しない)" do
+      post "/api/items", params: { ocrText: "なにも日付が無いテキスト" }, headers: time_header
+      expect(response.parsed_body).to eq({ "needManual" => true })
+    end
+
     it "ハニーポット項目 website に入力があれば破棄する(登録しない)" do
       post "/api/items", params: { ocrText: "牛乳 2026.07.10", website: "http://bot" }, headers: time_header
       expect(response).to have_http_status(:ok)

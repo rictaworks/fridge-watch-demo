@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# マスタ 61件を config/masters.json から投入する(§1.7)。
-# categories 8 / default_expiry 8 / consumption_rate 8 / date_patterns 6 /
-# category_keywords 24 / alert_levels 3 / esp32_commands 4 = 61 件。
+# マスタ 64件を config/masters.json から投入する(§1.7)。
+# categories 8 / default_expiry 8 / consumption_rate 8 / date_patterns 9 /
+# category_keywords 24 / alert_levels 3 / esp32_commands 4 = 64 件。
 # 冪等: upsert で再実行しても重複しない。マスタは日次リセットで保持される恒久データ。
 
 masters = JSON.parse(File.read(Rails.root.join("config", "masters.json")))
